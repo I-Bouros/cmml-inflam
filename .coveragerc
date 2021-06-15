@@ -1,0 +1,5 @@
+[run]
+source = epimodels
+omit = 
+    epimodels/tests/*
+    epimodels/data/*

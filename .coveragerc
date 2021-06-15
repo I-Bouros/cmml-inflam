@@ -1,5 +1,4 @@
 [run]
-source = epimodels
+source = cmmlinflam
 omit = 
-    epimodels/tests/*
-    epimodels/data/*
+    cmmlinflam/tests/*

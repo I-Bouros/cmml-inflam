@@ -3,7 +3,7 @@
 [![Multiple python versions](https://github.com/I-Bouros/multi-epi-model-cross-analysis/actions/workflows/python-version-unittests.yml/badge.svg)](https://github.com/I-Bouros/multi-epi-model-cross-analysis/actions/workflows/python-version-unittests.yml)
 [![Multiple OS](https://github.com/I-Bouros/multi-epi-model-cross-analysis/actions/workflows/os-unittests.yml/badge.svg)](https://github.com/I-Bouros/multi-epi-model-cross-analysis/actions/workflows/os-unittests.yml)
 [![Copyright License](https://github.com/I-Bouros/multi-epi-model-cross-analysis/actions/workflows/check-copyright.yml/badge.svg)](https://github.com/I-Bouros/multi-epi-model-cross-analysis/actions/workflows/check-copyright.yml)
-[![Documentation Status](https://readthedocs.org/projects/multi-epi-model-cross-analysis/badge/?version=latest)](https://multi-epi-model-cross-analysis.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/cmml-inflam/badge/?version=latest)](https://cmml-inflam.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/I-Bouros/cmml-inflam/branch/main/graph/badge.svg?token=D2K0BR7OgN)](https://codecov.io/gh/I-Bouros/cmml-inflam)
 [![Style (flake8)](https://github.com/I-Bouros/multi-epi-model-cross-analysis/actions/workflows/flake8-style-test.yml/badge.svg)](https://github.com/I-Bouros/multi-epi-model-cross-analysis/actions/workflows/flake8-style-test.yml)
 
@@ -13,7 +13,7 @@ in this collection are:
 - *Roche*.
 
 All features of our software are described in detail in our
-[full API documentation](https://multi-epi-model-cross-analysis.readthedocs.io/en/latest/).
+[full API documentation](https://cmml-inflam.readthedocs.io/en/latest/).
 
 More details on branching process models and inference can be found in these
 papers:

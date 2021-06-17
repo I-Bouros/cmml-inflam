@@ -142,7 +142,8 @@ def doctest_rst_and_public_interface():
     # has been added to cmmlinflam and should be imported above and included in
     # this list.
     cmmlinflam_submodules = [
-        'cmmlinflam.version_info'
+        'cmmlinflam.version_info',
+        'cmmlinflam.stem'
         ]
 
     doc_symbols = get_all_documented_symbols()

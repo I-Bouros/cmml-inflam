@@ -7,8 +7,7 @@ Welcome to cmmlinflam's documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   stem
 
 
 

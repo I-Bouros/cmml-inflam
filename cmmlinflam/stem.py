@@ -25,7 +25,7 @@ class StemGillespie(object):
     Base class for the forward simulation of the evolution of a population
     of STEM cells.
 
-    Three types of cells are considered -- those which present mustations that
+    Three types of cells are considered - those which present mustations that
     give selectional advantage irrespective of environmental conditions (e.g.
     KRAS) (A), those which present mustations that give selectional advantage
     dependent on environmental conditions (e.g. increasing TNF or IGN) (B)

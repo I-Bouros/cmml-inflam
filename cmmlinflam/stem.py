@@ -37,7 +37,7 @@ class StemGillespie(object):
     The system of equations that describe the different phenomena that can
     occur:
 
-    ..math:
+    ..math::
         :nowrap:
 
         \begin{eqnarray}
@@ -48,7 +48,7 @@ class StemGillespie(object):
             \emptyset \xrightarrow{\alpha_{A}} A \\
             \emptyset \xrightarrow{\alpha_{B}} B \\
             WT \xrightarrow{\mu_{A}} A \\
-            WT \xrightarrow{\mu_{B}} B \\
+            WT \xrightarrow{\mu_{B}} B
         \end{eqnarray}
 
     where m is the rate of decay, :math:`\alpha_{WT}`, :math:`\alpha_{A}`,

@@ -21,7 +21,6 @@ from scipy.stats import uniform
 
 class StemGillespie(object):
     r"""StemGillespie Class:
-
     Base class for the forward simulation of the evolution of a population
     of STEM cells.
 

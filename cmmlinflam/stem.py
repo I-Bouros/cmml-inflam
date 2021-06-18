@@ -42,16 +42,16 @@ class StemGillespie(object):
     ..math:
         :nowrap:
 
-            \begin{eqnarray}
-                WT \xrightarrow{m} \emptyset
-                A \xrightarrow{m} \emptyset
-                B \xrightarrow{m} \emptyset
-                \emptyset \xrightarrow{\alpha_{WT}} WT
-                \emptyset \xrightarrow{\alpha_{A}} A
-                \emptyset \xrightarrow{\alpha_{B}} B
-                WT \xrightarrow{\mu_{A}} A
-                WT \xrightarrow{\mu_{B}} B
-            \end{eqnarray}
+        \begin{eqnarray}
+            WT \xrightarrow{m} \emptyset \\
+            A \xrightarrow{m} \emptyset \\
+            B \xrightarrow{m} \emptyset \\
+            \emptyset \xrightarrow{\alpha_{WT}} WT \\
+            \emptyset \xrightarrow{\alpha_{A}} A \\
+            \emptyset \xrightarrow{\alpha_{B}} B \\
+            WT \xrightarrow{\mu_{A}} A \\
+            WT \xrightarrow{\mu_{B}} B \\
+        \end{eqnarray}
 
     where m is the rate of decay, :math:`\alpha_{WT}`, :math:`\alpha_{A}`,
     and :math:`\alpha_{B}` are the growth rates for the WT, A and B cell

@@ -37,7 +37,7 @@ class StemGillespie(object):
     The system of equations that describe the different phenomena that can
     occur
 
-    ..math::
+    .. math::
         :nowrap:
 
         \begin{eqnarray}

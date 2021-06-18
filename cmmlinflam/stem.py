@@ -282,11 +282,20 @@ class StemGillespie(object):
 
     def gillespie_algorithm(self, times):
         """
+        Runs the Gillespie algorithm for the STEM cell population
+        for the given times.
+
+        Parameters
+        ----------
+        times
+            (list) Vector of the times for which the run the Gillespie
+            algorithm.
+
         """
         # Split compartments into their types
         i_WT, i_A, i_B = self.init_cond
 
-        solution = np.empty((len(times), 3))
+        solution = np.empty((len(times), 3), dtype=np.int)
         for t, _ in enumerate(times):
             solution[t, :] = [i_WT, i_A, i_B]
             i_WT, i_A, i_B = self.one_step_gillespie(i_WT, i_A, i_B)
@@ -323,6 +332,9 @@ class StemGillespie(object):
             raise TypeError('End time of siumlation must be integer.')
         if end_time <= 0:
             raise ValueError('Start time of siumlation must be > 0.')
+
+        if start_time > end_time:
+            raise ValueError('End time must be after start time.')
 
         if not isinstance(parameters, list):
             raise TypeError('Parameters must be given in a list format.')
@@ -368,8 +380,3 @@ class StemGillespie(object):
         output = sol['state']
 
         return output
-
-
-s = StemGillespie()
-parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-print(s.simulate(parameters, 1, 30))

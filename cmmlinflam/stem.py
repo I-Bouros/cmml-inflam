@@ -35,7 +35,7 @@ class StemGillespie(object):
     given rates of mutation.
 
     The system of equations that describe the different phenomena that can
-    occur:
+    occur
 
     ..math::
         :nowrap:

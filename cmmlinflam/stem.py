@@ -20,7 +20,47 @@ from scipy.stats import uniform
 
 
 class StemGillespie(object):
-    """
+    r"""StemGillespie Class:
+
+    Base class for the forward simulation of the evolution of a population
+    of STEM cells.
+
+    Three types of cells are considered: those which present mustations that
+    give selectional advantage irrespective of environmental conditions (e.g.
+    KRAS) (A), those which present mustations that give selectional advantage
+    dependent on environmental conditions (e.g. increasing TNF or IGN) (B)
+    and the wild type cells (WT).
+
+    Cells decay at the same rate independent of their type and devide with
+    rates which illsutate their selectional advantage. A wild type cell (WT)
+    can mutate to a cell of type A, respectively a cell of type B with constant
+    given rates of mutation.
+
+    The system of equations that describe the different phenomena that can
+    occur:
+
+    ..math:
+        :nowrap:
+
+            \begin{eqnarray}
+                WT \xrightarrow{m} \emptyset
+                A \xrightarrow{m} \emptyset
+                B \xrightarrow{m} \emptyset
+                \emptyset \xrightarrow{\alpha_{WT}} WT
+                \emptyset \xrightarrow{\alpha_{A}} A
+                \emptyset \xrightarrow{\alpha_{B}} B
+                WT \xrightarrow{\mu_{A}} A
+                WT \xrightarrow{\mu_{B}} B
+            \end{eqnarray}
+
+    where m is the rate of decay, :math:`\alpha_{WT}`, :math:`\alpha_{A}`,
+    and :math:`\alpha_{B}` are the growth rates for the WT, A and B cell
+    type respectively and :math:`\mu_{A}` and :math:`\mu_{B}` are the rate
+    of mutation of a WT cell into A cell and respectively, a B cell type.
+
+    The total cell population is considered constant so the division of a cell
+    is always followed by the death of a cell and vice versa.
+
     """
     def __init__(self):
         super(StemGillespie, self).__init__()

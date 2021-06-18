@@ -5,7 +5,7 @@
 [![Copyright License](https://github.com/I-Bouros/cmml-inflam/actions/workflows/check-copyright.yml/badge.svg)](https://github.com/I-Bouros/cmml-inflam/actions/workflows/check-copyright.yml)
 [![Documentation Status](https://readthedocs.org/projects/cmml-inflam/badge/?version=latest)](https://cmml-inflam.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/I-Bouros/cmml-inflam/branch/main/graph/badge.svg?token=D2K0BR7OgN)](https://codecov.io/gh/I-Bouros/cmml-inflam)
-[![Style tests (flake8)](https://github.com/I-Bouros/cmml-inflam/actions/workflows/flake8-style-test.yml/badge.svg)](https://github.com/I-Bouros/cmml-inflam/actions/workflows/flake8-style-test.yml))
+[![Style tests (flake8)](https://github.com/I-Bouros/cmml-inflam/actions/workflows/flake8-style-test.yml/badge.svg)](https://github.com/I-Bouros/cmml-inflam/actions/workflows/flake8-style-test.yml)
 
 A collection of multiple epidemiological models used in the modelling of cases observed during the COVID-19 pandemic. Amongst the models curated
 in this collection are:

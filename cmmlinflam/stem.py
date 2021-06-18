@@ -24,11 +24,10 @@ class StemGillespie(object):
     Base class for the forward simulation of the evolution of a population
     of STEM cells.
 
-    Three types of cells are considered - those which present mustations that
-    give selectional advantage irrespective of environmental conditions (e.g.
-    KRAS) (A), those which present mustations that give selectional advantage
-    dependent on environmental conditions (e.g. increasing TNF or IGN) (B)
-    and the wild type cells (WT).
+    Three types of cells are considered - those which present mutations that
+    give selectional advantage irrespective of environmental conditions (A),
+    those which present mutations that give selectional advantage dependent
+    on environmental conditions (B) and the wild type cells (WT).
 
     Cells decay at the same rate independent of their type and devide with
     rates which illsutate their selectional advantage. A wild type cell (WT)

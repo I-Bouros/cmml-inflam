@@ -42,7 +42,7 @@ setup(
     # Version
     version=get_version(),
 
-    description='A collection of multiple epidemiological models used in the modelling of cases observed during the COVID-19 pandemic.',  # noqa
+    description='A collection of stochastic processes models used in the modelling of the effect of inflammation in the evolution of CMML.',  # noqa
 
     long_description_content_type='text/markdown',
 

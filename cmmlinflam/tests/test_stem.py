@@ -56,7 +56,7 @@ class TestStemGillespie(unittest.TestCase):
 
     def test_simulate(self):
         algo = ci.StemGillespie()
-        parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
 
         output_algorithm = algo.simulate(parameters, 1, 30)
 

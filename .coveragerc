@@ -2,3 +2,4 @@
 source = cmmlinflam
 omit = 
     cmmlinflam/tests/*
+    cmmlinflam/examples/*

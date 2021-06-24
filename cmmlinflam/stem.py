@@ -390,28 +390,7 @@ class StemGillespie(object):
         if start_time > end_time:
             raise ValueError('End time must be after start time.')
 
-        if not isinstance(parameters, list):
-            raise TypeError('Parameters must be given in a list format.')
-        if len(parameters) != 8:
-            raise ValueError('List of parameters needs to be of length 8.')
-        for _ in range(3):
-            if not isinstance(parameters[_], int):
-                raise TypeError(
-                    'Initial cell count must be integer.')
-            if parameters[_] < 0:
-                raise ValueError('Initial cell count must be => 0.')
-        for _ in range(3, 6):
-            if not isinstance(parameters[_], (float, int)):
-                raise TypeError(
-                    'Growth rate must be integer or float.')
-            if parameters[_] < 0:
-                raise ValueError('Growth rate must be => 0.')
-        for _ in range(6, 8):
-            if not isinstance(parameters[_], (float, int)):
-                raise TypeError(
-                    'Mutation rate must be integer or float.')
-            if parameters[_] < 0:
-                raise ValueError('Mutation rate must be => 0.')
+        self._check_parameters_format(parameters)
 
         # Split parameters into the features of the model
         # initial conditions
@@ -487,28 +466,7 @@ class StemGillespie(object):
         if criterion > 1:
             raise ValueError('Start time of siumlation must be <= 1.')
 
-        if not isinstance(parameters, list):
-            raise TypeError('Parameters must be given in a list format.')
-        if len(parameters) != 8:
-            raise ValueError('List of parameters needs to be of length 8.')
-        for _ in range(3):
-            if not isinstance(parameters[_], int):
-                raise TypeError(
-                    'Initial cell count must be integer.')
-            if parameters[_] < 0:
-                raise ValueError('Initial cell count must be => 0.')
-        for _ in range(3, 6):
-            if not isinstance(parameters[_], (float, int)):
-                raise TypeError(
-                    'Growth rate must be integer or float.')
-            if parameters[_] < 0:
-                raise ValueError('Growth rate must be => 0.')
-        for _ in range(6, 8):
-            if not isinstance(parameters[_], (float, int)):
-                raise TypeError(
-                    'Mutation rate must be integer or float.')
-            if parameters[_] < 0:
-                raise ValueError('Mutation rate must be => 0.')
+        self._check_parameters_format(parameters)
 
         # Split parameters into the features of the model
         # initial conditions
@@ -531,3 +489,27 @@ class StemGillespie(object):
         final_state = sol['state']
 
         return computation_time, final_state
+
+    def _check_parameters_format(self, parameters):
+        if not isinstance(parameters, list):
+            raise TypeError('Parameters must be given in a list format.')
+        if len(parameters) != 8:
+            raise ValueError('List of parameters needs to be of length 8.')
+        for _ in range(3):
+            if not isinstance(parameters[_], int):
+                raise TypeError(
+                    'Initial cell count must be integer.')
+            if parameters[_] < 0:
+                raise ValueError('Initial cell count must be => 0.')
+        for _ in range(3, 6):
+            if not isinstance(parameters[_], (float, int)):
+                raise TypeError(
+                    'Growth rate must be integer or float.')
+            if parameters[_] < 0:
+                raise ValueError('Growth rate must be => 0.')
+        for _ in range(6, 8):
+            if not isinstance(parameters[_], (float, int)):
+                raise TypeError(
+                    'Mutation rate must be integer or float.')
+            if parameters[_] < 0:
+                raise ValueError('Mutation rate must be => 0.')

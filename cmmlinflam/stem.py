@@ -34,7 +34,7 @@ class StemGillespie(object):
     can mutate to a cell of type A, respectively a cell of type B with constant
     given rates of mutation.
 
-    The system of equations that describe the different phenomena that can
+    The system of equations that describe the isolated possible events that can
     occur
 
     .. math::
@@ -57,7 +57,23 @@ class StemGillespie(object):
     of mutation of a WT cell into A cell and respectively, a B cell type.
 
     The total cell population is considered constant so the division of a cell
-    is always followed by the death of a cell and vice versa.
+    is always simultanious to the death of a cell.
+
+    Therefore, the actual system of equations that describes the model is
+
+    .. math::
+        :nowrap:
+
+        \begin{eqnarray}
+            WT + WT &\xrightarrow{P_{WT \xrightarrow A}} WT + A \\
+            WT + WT &\xrightarrow{P_{WT \xrightarrow B}} WT + B \\
+            A + WT &\xrightarrow{P_{A \xrightarrow WT}} WT + WT \\
+            A + WT &\xrightarrow{P_{WT \xrightarrow B}} A + B \\
+            B + WT &\xrightarrow{P_{B \xrightarrow WT}} WT + WT \\
+            B + WT &\xrightarrow{P_{WT \xrightarrow A}} A + B \\
+            A + B &\xrightarrow{P_{A \xrightarrow WT}} B + WT \\
+            A + B &\xrightarrow{P_{B \xrightarrow WT}} A + WT
+        \end{eqnarray}
 
     """
     def __init__(self):
@@ -318,7 +334,7 @@ class StemGillespie(object):
 
         return (i_WT, i_A, i_B)
 
-    def gillespie_algorithm(self, times):
+    def gillespie_algorithm_fixed_times(self, times):
         """
         Runs the Gillespie algorithm for the STEM cell population
         for the given times.
@@ -340,7 +356,7 @@ class StemGillespie(object):
 
         return({'state': solution})
 
-    def simulate(self, parameters, start_time, end_time):
+    def simulate_fixed_times(self, parameters, start_time, end_time):
         r"""
         Computes the number of each type of cell in a given tumor between the
         given time points.
@@ -413,8 +429,105 @@ class StemGillespie(object):
         self.mu_B = parameters[7]
 
         times = range(start_time, end_time+1)
-        sol = self.gillespie_algorithm(times)
+        sol = self.gillespie_algorithm_fixed_times(times)
 
         output = sol['state']
 
         return output
+
+    def gillespie_algorithm_criterion(self, criterion):
+        """
+        Runs the Gillespie algorithm for the STEM cell population
+        until a criterion is met.
+
+        Parameters
+        ----------
+        criterion
+            (float) Percentage threshold of WT cells in the population
+            for disease to be triggered.
+
+        """
+        # Split compartments into their types
+        i_WT, i_A, i_B = self.init_cond
+
+        time_to_criterion = 0
+        while i_WT > criterion * self.N:
+            i_WT, i_A, i_B = self.one_step_gillespie(i_WT, i_A, i_B)
+            time_to_criterion += 1
+
+        return ({
+            'time': time_to_criterion,
+            'state': np.array([i_WT, i_A, i_B], dtype=np.int)})
+
+    def simulate_criterion(self, parameters, criterion):
+        r"""
+        Computes the number of each type of cell in a given tumor between the
+        given time points.
+
+        Parameters
+        ----------
+        parameters
+            (list) List of quantities that characterise the STEM cells cycle in
+            this order: the initial counts for each type of cell (i_WT, i_A,
+            i_B), the growth rate for the WT, the boosts in selection given to
+            the mutated A and B variant respectively and the mutation rates
+            with which a WT cell transforms into an A and B variant,
+            respectively.
+        criterion
+            (float) Percentage threshold of WT cells in the population
+            for disease to be triggered.
+
+        """
+        # Check correct format of output
+        if not isinstance(criterion, (float, int)):
+            raise TypeError(
+                'Start time of siumlation must be integer or float.')
+        if criterion < 0:
+            raise ValueError('Start time of siumlation must be >= 0.')
+        if criterion > 1:
+            raise ValueError('Start time of siumlation must be <= 1.')
+
+        if not isinstance(parameters, list):
+            raise TypeError('Parameters must be given in a list format.')
+        if len(parameters) != 8:
+            raise ValueError('List of parameters needs to be of length 8.')
+        for _ in range(3):
+            if not isinstance(parameters[_], int):
+                raise TypeError(
+                    'Initial cell count must be integer.')
+            if parameters[_] < 0:
+                raise ValueError('Initial cell count must be => 0.')
+        for _ in range(3, 6):
+            if not isinstance(parameters[_], (float, int)):
+                raise TypeError(
+                    'Growth rate must be integer or float.')
+            if parameters[_] < 0:
+                raise ValueError('Growth rate must be => 0.')
+        for _ in range(6, 8):
+            if not isinstance(parameters[_], (float, int)):
+                raise TypeError(
+                    'Mutation rate must be integer or float.')
+            if parameters[_] < 0:
+                raise ValueError('Mutation rate must be => 0.')
+
+        # Split parameters into the features of the model
+        # initial conditions
+        self.init_cond = parameters[:3]
+        self.N = sum(self.init_cond)
+
+        # growth rates
+        alpha, s, r = parameters[3:6]
+        self.alpha_WT = alpha
+        self.alpha_A = alpha + s
+        self.alpha_B = alpha + r
+
+        # mutation rates
+        self.mu_A = parameters[6]
+        self.mu_B = parameters[7]
+
+        sol = self.gillespie_algorithm_criterion(criterion)
+
+        computation_time = sol['time']
+        final_state = sol['state']
+
+        return computation_time, final_state

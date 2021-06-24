@@ -54,11 +54,11 @@ class TestStemGillespie(unittest.TestCase):
             outputs1 = ['W', 'A']
             algo.set_outputs(outputs1)
 
-    def test_simulate(self):
+    def test_simulate_fixed_times(self):
         algo = ci.StemGillespie()
         parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
 
-        output_algorithm = algo.simulate(parameters, 1, 30)
+        output_algorithm = algo.simulate_fixed_times(parameters, 1, 30)
 
         self.assertEqual(
             output_algorithm.shape,
@@ -66,52 +66,101 @@ class TestStemGillespie(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate(parameters, '1', 30)
+            algo.simulate_fixed_times(parameters, '1', 30)
 
         with self.assertRaises(ValueError):
             parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate(parameters, 0, 30)
+            algo.simulate_fixed_times(parameters, 0, 30)
 
         with self.assertRaises(TypeError):
             parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate(parameters, 1, 30.)
+            algo.simulate_fixed_times(parameters, 1, 30.)
 
         with self.assertRaises(ValueError):
             parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate(parameters, 1, -2)
+            algo.simulate_fixed_times(parameters, 1, -2)
 
         with self.assertRaises(ValueError):
             parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate(parameters, 10, 3)
+            algo.simulate_fixed_times(parameters, 10, 3)
 
         with self.assertRaises(TypeError):
             parameters = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
-            algo.simulate(parameters, 1, 30)
+            algo.simulate_fixed_times(parameters, 1, 30)
 
         with self.assertRaises(ValueError):
             parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003, 0]
-            algo.simulate(parameters, 1, 30)
+            algo.simulate_fixed_times(parameters, 1, 30)
 
         with self.assertRaises(TypeError):
             parameters = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate(parameters, 1, 30)
+            algo.simulate_fixed_times(parameters, 1, 30)
 
         with self.assertRaises(ValueError):
             parameters = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate(parameters, 1, 30)
+            algo.simulate_fixed_times(parameters, 1, 30)
 
         with self.assertRaises(TypeError):
             parameters = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
-            algo.simulate(parameters, 1, 30)
+            algo.simulate_fixed_times(parameters, 1, 30)
 
         with self.assertRaises(ValueError):
             parameters = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
-            algo.simulate(parameters, 1, 30)
+            algo.simulate_fixed_times(parameters, 1, 30)
 
         with self.assertRaises(TypeError):
             parameters = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
-            algo.simulate(parameters, 1, 30)
+            algo.simulate_fixed_times(parameters, 1, 30)
 
         with self.assertRaises(ValueError):
             parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
-            algo.simulate(parameters, 1, 30)
+            algo.simulate_fixed_times(parameters, 1, 30)
+
+    def test_simulate_criterion(self):
+        algo = ci.StemGillespie()
+        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+
+        computation_time, final_state = algo.simulate_criterion(
+            parameters, 0.2)
+
+        self.assertEqual(
+            final_state.shape,
+            (3, ))
+
+        self.assertEqual(type(computation_time), int)
+
+        with self.assertRaises(TypeError):
+            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters, '0.2')
+
+        with self.assertRaises(ValueError):
+            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters, -0.2)
+
+        with self.assertRaises(ValueError):
+            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters, 1.2)
+
+        with self.assertRaises(TypeError):
+            parameters = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters, 0.2)
+
+        with self.assertRaises(ValueError):
+            parameters = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters, 0.2)
+
+        with self.assertRaises(TypeError):
+            parameters = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters, 0.2)
+
+        with self.assertRaises(ValueError):
+            parameters = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters, 0.2)
+
+        with self.assertRaises(TypeError):
+            parameters = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
+            algo.simulate_criterion(parameters, 0.2)
+
+        with self.assertRaises(ValueError):
+            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
+            algo.simulate_criterion(parameters, 0.2)

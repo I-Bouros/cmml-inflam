@@ -57,7 +57,7 @@ class StemGillespie(object):
     of mutation of a WT cell into A cell and respectively, a B cell type.
 
     The total cell population is considered constant so the division of a cell
-    is always simultanious to the death of a cell.
+    is always simultaneous to the death of a cell.
 
     Therefore, the actual system of equations that describes the model is
 
@@ -67,7 +67,9 @@ class StemGillespie(object):
         \begin{eqnarray}
             WT + WT &\xrightarrow{P_{WT \xrightarrow A}} WT + A \\
             WT + WT &\xrightarrow{P_{WT \xrightarrow B}} WT + B \\
+            A + WT &\xrightarrow{P_{A \xrightarrow B}} B + WT \\
             A + WT &\xrightarrow{P_{A \xrightarrow WT}} WT + WT \\
+            B + WT &\xrightarrow{P_{B \xrightarrow A}} A + WT \\
             A + WT &\xrightarrow{P_{WT \xrightarrow B}} A + B \\
             B + WT &\xrightarrow{P_{B \xrightarrow WT}} WT + WT \\
             B + WT &\xrightarrow{P_{WT \xrightarrow A}} A + B \\
@@ -148,7 +150,7 @@ class StemGillespie(object):
         different species of cell in the tumor.
 
         This event can occur either through the mutation of a WT to a B,
-        or the simultanious division of a B cell which kills a WT cell.
+        or the simultaneous division of a B cell which kills a WT cell.
 
         Parameters
         ----------
@@ -185,7 +187,7 @@ class StemGillespie(object):
         different species of cell in the tumor.
 
         This event can occur either through the mutation of a WT to a A,
-        or the simultanious division of a A cell which kills a WT cell.
+        or the simultaneous division of a A cell which kills a WT cell.
 
         Parameters
         ----------
@@ -221,7 +223,7 @@ class StemGillespie(object):
         when there is a change in the counts of the
         different species of cell in the tumor.
 
-        This event can only occur either through the simultanious division of
+        This event can only occur either through the simultaneous division of
         a WT cell which kills a B cell.
 
         Parameters
@@ -254,7 +256,7 @@ class StemGillespie(object):
         when there is a change in the counts of the
         different species of cell in the tumor.
 
-        This event can only occur either through the simultanious division of
+        This event can only occur either through the simultaneous division of
         a WT cell which kills a A cell.
 
         Parameters
@@ -278,6 +280,72 @@ class StemGillespie(object):
             self.alpha_A * i_A) + self.alpha_B * i_B
         prob_WT_divide = (self.alpha_WT * i_WT) / tot_growth_rate
         divis = (1-mu) * prob_A_die * prob_WT_divide
+
+        return divis
+
+    def _prob_A_to_B(self, i_WT, i_A, i_B):
+        """
+        Computes the probability of losing a A cell and gaining a B cell
+        when there is a change in the counts of the
+        different species of cell in the tumor.
+
+        This event can only occur either through the simultaneous division of
+        a B cell which kills a A cell.
+
+        Parameters
+        ----------
+        i_WT
+            (int) number of wildtype cells (WT) in the tumor at current time
+            point.
+        i_A
+            (int) number of 1st type mutated cells (A) in the tumor at current
+            time point.
+        i_B
+            (int) number of 2nd type mutated cells (B) in the tumor at current
+            time point.
+
+        """
+        mu = self.mu_A + self.mu_B
+
+        # Compute probability of change through division
+        prob_A_die = i_A/self.N
+        tot_growth_rate = self.alpha_WT * i_WT + (
+            self.alpha_A * i_A) + self.alpha_B * i_B
+        prob_B_divide = (self.alpha_B * i_B) / tot_growth_rate
+        divis = (1-mu) * prob_A_die * prob_B_divide
+
+        return divis
+
+    def _prob_B_to_A(self, i_WT, i_A, i_B):
+        """
+        Computes the probability of losing a B cell and gaining a A cell
+        when there is a change in the counts of the
+        different species of cell in the tumor.
+
+        This event can only occur either through the simultaneous division of
+        a A cell which kills a B cell.
+
+        Parameters
+        ----------
+        i_WT
+            (int) number of wildtype cells (WT) in the tumor at current time
+            point.
+        i_A
+            (int) number of 1st type mutated cells (A) in the tumor at current
+            time point.
+        i_B
+            (int) number of 2nd type mutated cells (B) in the tumor at current
+            time point.
+
+        """
+        mu = self.mu_A + self.mu_B
+
+        # Compute probability of change through division
+        prob_B_die = i_B/self.N
+        tot_growth_rate = self.alpha_WT * i_WT + (
+            self.alpha_A * i_A) + self.alpha_B * i_B
+        prob_A_divide = (self.alpha_A * i_A) / tot_growth_rate
+        divis = (1-mu) * prob_B_die * prob_A_divide
 
         return divis
 
@@ -308,29 +376,36 @@ class StemGillespie(object):
         propens_2 = self._prob_WT_to_A(i_WT, i_A, i_B)
         propens_3 = self._prob_B_to_WT(i_WT, i_A, i_B)
         propens_4 = self._prob_A_to_WT(i_WT, i_A, i_B)
+        propens_5 = self._prob_A_to_B(i_WT, i_A, i_B)
+        propens_6 = self._prob_B_to_A(i_WT, i_A, i_B)
 
-        propens = np.array([propens_1, propens_2, propens_3, propens_4])
+        propens = np.array([
+            propens_1, propens_2, propens_3, propens_4,
+            propens_5, propens_6])
         sum_propens = np.empty(propens.shape)
         for e in range(propens.shape[0]):
             sum_propens[e] = np.sum(propens[:(e+1)])
 
-        # Total propensity
-        tot_propens = propens_1 + propens_2 + propens_3 + propens_4
-
-        frac_propens = (1/tot_propens) * sum_propens
-
-        if u < frac_propens[0]:
+        if u >= sum_propens[5]:
+            pass
+        elif u < sum_propens[0]:
             i_WT += -1
             i_B += 1
-        elif (u >= frac_propens[0]) and (u < frac_propens[1]):
+        elif (u >= sum_propens[0]) and (u < sum_propens[1]):
             i_WT += -1
             i_A += 1
-        elif (u >= frac_propens[1]) and (u < frac_propens[2]):
+        elif (u >= sum_propens[1]) and (u < sum_propens[2]):
             i_WT += 1
             i_B += -1
-        else:
+        elif (u >= sum_propens[2]) and (u < sum_propens[3]):
             i_WT += 1
             i_A += -1
+        elif (u >= sum_propens[3]) and (u < sum_propens[4]):
+            i_B += 1
+            i_A += -1
+        elif (u >= sum_propens[4]) and (u < sum_propens[5]):
+            i_A += 1
+            i_B += -1
 
         return (i_WT, i_A, i_B)
 

@@ -65,16 +65,16 @@ class StemGillespie(object):
         :nowrap:
 
         \begin{eqnarray}
-            WT + WT &\xrightarrow{P_{WT \xrightarrow A}} WT + A \\
-            WT + WT &\xrightarrow{P_{WT \xrightarrow B}} WT + B \\
-            A + WT &\xrightarrow{P_{A \xrightarrow B}} B + WT \\
-            A + WT &\xrightarrow{P_{A \xrightarrow WT}} WT + WT \\
-            B + WT &\xrightarrow{P_{B \xrightarrow A}} A + WT \\
-            A + WT &\xrightarrow{P_{WT \xrightarrow B}} A + B \\
-            B + WT &\xrightarrow{P_{B \xrightarrow WT}} WT + WT \\
-            B + WT &\xrightarrow{P_{WT \xrightarrow A}} A + B \\
-            A + B &\xrightarrow{P_{A \xrightarrow WT}} B + WT \\
-            A + B &\xrightarrow{P_{B \xrightarrow WT}} A + WT
+            WT + WT &\xrightarrow{P_{WT \rightarrow A}} WT + A \\
+            WT + WT &\xrightarrow{P_{WT \rightarrow B}} WT + B \\
+            A + WT &\xrightarrow{P_{A \rightarrow B}} B + WT \\
+            A + WT &\xrightarrow{P_{A \rightarrow WT}} WT + WT \\
+            B + WT &\xrightarrow{P_{B \rightarrow A}} A + WT \\
+            A + WT &\xrightarrow{P_{WT \rightarrow B}} A + B \\
+            B + WT &\xrightarrow{P_{B \rightarrow WT}} WT + WT \\
+            B + WT &\xrightarrow{P_{WT \rightarrow A}} A + B \\
+            A + B &\xrightarrow{P_{A \rightarrow WT}} B + WT \\
+            A + B &\xrightarrow{P_{B \rightarrow WT}} A + WT
         \end{eqnarray}
 
     """

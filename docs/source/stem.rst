@@ -7,9 +7,16 @@ STEM Cells
 Overview:
 
 - :class:`StemGillespie`
+- :class:`StemGillespieTIMEVAR`
 
-STEM Cell Cycle Algorithm
-*************************
+STEM Cell Cycle Algorithm with Fixed Environment
+************************************************
 
 .. autoclass:: StemGillespie
+  :members:
+
+STEM Cell Cycle Algorithm with Variable Environment
+***************************************************
+
+.. autoclass:: StemGillespieTIMEVAR
   :members:

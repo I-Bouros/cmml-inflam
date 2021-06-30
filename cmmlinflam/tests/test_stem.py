@@ -224,11 +224,11 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
         switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
         output_algorithm = algo.simulate_fixed_times(
-            parameters, switch_times, 1, 30)
+            parameters, switch_times, 1, 100)
 
         self.assertEqual(
             output_algorithm.shape,
-            (30, 3))
+            (100, 3))
 
         with self.assertRaises(TypeError):
             parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]

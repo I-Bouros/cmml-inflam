@@ -1037,20 +1037,20 @@ class StemGillespieTIMEVAR(StemGillespie):
                     have 2 columns'
                 )
         for _ in range(np.asarray(switch_times).shape[0]):
-            if not isinstance(switch_times[_, 0], (int, np.integer)):
+            if not isinstance(switch_times[_][0], int):
                 raise TypeError('Times of switches in environmental levels must \
                     be integer.')
-            if switch_times[_, 0] < 0:
+            if switch_times[_][0] < 0:
                 raise ValueError('Times of switches in environmental levels must \
                     be => 0.')
             if not isinstance(
-                    switch_times[_, 1], (int, float, np.integer, np.floating)):
+                    switch_times[_][1], (int, float)):
                 raise TypeError('Environmental levels must \
                     be integer or float.')
-            if switch_times[_, 1] < 0:
+            if switch_times[_][1] < 0:
                 raise ValueError('Environmental levels must \
                     be => 0.')
-        if switch_times[0, 0] != 0:
+        if switch_times[0][0] != 0:
             raise ValueError('First time of switch in environmental levels must \
                 be => 0.')
 

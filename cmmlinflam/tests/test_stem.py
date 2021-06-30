@@ -9,8 +9,6 @@ import unittest
 
 import cmmlinflam as ci
 
-import numpy as np
-
 
 class TestStemGillespie(unittest.TestCase):
     """
@@ -223,7 +221,7 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
     def test_simulate_fixed_times(self):
         algo = ci.StemGillespieTIMEVAR()
         parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
-        switch_times = np.array([[0, 1], [5, 0], [10, 1], [20, 0]])
+        switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
         output_algorithm = algo.simulate_fixed_times(
             parameters, switch_times, 1, 30)
@@ -253,31 +251,31 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
             algo.simulate_fixed_times(parameters, switch_times, 10, 3)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([0, 1, 2])
+            switch_times = [0, 1, 2]
             algo.simulate_fixed_times(parameters, switch_times, 1, 30)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([[0], [1], [2]])
+            switch_times = [[0], [1], [2]]
             algo.simulate_fixed_times(parameters, switch_times, 1, 30)
 
         with self.assertRaises(TypeError):
-            switch_times = np.array([[0, 1], ['5', 0], [10, 1], [20, 0]])
+            switch_times = [[0, 1], ['5', 0], [10, 1], [20, 0]]
             algo.simulate_fixed_times(parameters, switch_times, 1, 30)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([[0, 1], [-5, 0], [10, 1], [20, 0]])
+            switch_times = [[0, 1], [-5, 0], [10, 1], [20, 0]]
             algo.simulate_fixed_times(parameters, switch_times, 1, 30)
 
         with self.assertRaises(TypeError):
-            switch_times = np.array([[0, 1], [5, 0], [10, '1'], [20, 0]])
+            switch_times = [[0, 1], [5, 0], [10, '1'], [20, 0]]
             algo.simulate_fixed_times(parameters, switch_times, 1, 30)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([[0, 1], [5, 0], [10, -1], [20, 0]])
+            switch_times = [[0, 1], [5, 0], [10, -1], [20, 0]]
             algo.simulate_fixed_times(parameters, switch_times, 1, 30)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([[2, 1], [5, 0], [10, 1], [20, 0]])
+            switch_times = [[2, 1], [5, 0], [10, 1], [20, 0]]
             algo.simulate_fixed_times(parameters, switch_times, 1, 30)
 
         with self.assertRaises(TypeError):
@@ -315,7 +313,7 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
     def test_simulate_criterion(self):
         algo = ci.StemGillespieTIMEVAR()
         parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
-        switch_times = np.array([[0, 1], [5, 0], [10, 1], [20, 0]])
+        switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
         computation_time, final_state = algo.simulate_criterion(
             parameters, switch_times, 0.2)
@@ -339,31 +337,31 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
             algo.simulate_criterion(parameters, switch_times, 1.2)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([0, 1, 2])
+            switch_times = [0, 1, 2]
             algo.simulate_criterion(parameters, switch_times, 0.2)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([[0], [1], [2]])
+            switch_times = [[0], [1], [2]]
             algo.simulate_criterion(parameters, switch_times, 0.2)
 
         with self.assertRaises(TypeError):
-            switch_times = np.array([[0, 1], ['5', 0], [10, 1], [20, 0]])
+            switch_times = [[0, 1], ['5', 0], [10, 1], [20, 0]]
             algo.simulate_criterion(parameters, switch_times, 0.2)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([[0, 1], [-5, 0], [10, 1], [20, 0]])
+            switch_times = [[0, 1], [-5, 0], [10, 1], [20, 0]]
             algo.simulate_criterion(parameters, switch_times, 0.2)
 
         with self.assertRaises(TypeError):
-            switch_times = np.array([[0, 1], [5, 0], [10, '1'], [20, 0]])
+            switch_times = [[0, 1], [5, 0], [10, '1'], [20, 0]]
             algo.simulate_criterion(parameters, switch_times, 0.2)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([[0, 1], [5, 0], [10, -1], [20, 0]])
+            switch_times = [[0, 1], [5, 0], [10, -1], [20, 0]]
             algo.simulate_criterion(parameters, switch_times, 0.2)
 
         with self.assertRaises(ValueError):
-            switch_times = np.array([[2, 1], [5, 0], [10, 1], [20, 0]])
+            switch_times = [[2, 1], [5, 0], [10, 1], [20, 0]]
             algo.simulate_criterion(parameters, switch_times, 0.2)
 
         with self.assertRaises(TypeError):

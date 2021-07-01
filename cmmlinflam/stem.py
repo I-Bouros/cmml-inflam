@@ -988,7 +988,7 @@ class StemGillespieTIMEVAR(StemGillespie):
             with which a WT cell transforms into an A and B variant,
             respectively.
         switch_times
-            (numpy.array) Array of the times at which the environmental
+            (list of lists) Array of the times at which the environmental
             conditions accounted for the B cell line. The first column
             indicates the time of change and the second indicate the level
             of the environment -- 0 for LOW; 1 for HIGH.
@@ -1094,7 +1094,7 @@ class StemGillespieTIMEVAR(StemGillespie):
             with which a WT cell transforms into an A and B variant,
             respectively.
         switch_times
-            (numpy.array) Array of the times at which the environmental
+            (list of lists) Array of the times at which the environmental
             conditions accounted for the B cell line. The first column
             indicates the time of change and the second indicate the level
             of the environment -- 0 for LOW; 1 for HIGH.

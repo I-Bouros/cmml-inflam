@@ -559,6 +559,10 @@ class StemGillespie(object):
         return computation_time, final_state
 
     def _check_parameters_format(self, parameters):
+        """
+        Checks the format of the `paramaters` input in the simulation methods.
+
+        """
         if not isinstance(parameters, list):
             raise TypeError('Parameters must be given in a list format.')
         if len(parameters) != 8:
@@ -1026,6 +1030,11 @@ class StemGillespieTIMEVAR(StemGillespie):
         return output
 
     def _check_switch_times(self, switch_times):
+        """
+        Checks the format of the `switch_times` input in the simulation
+        methods.
+
+        """
         if np.asarray(switch_times).ndim != 2:
             raise ValueError(
                 'Times of switches in environmental levels storage format must \

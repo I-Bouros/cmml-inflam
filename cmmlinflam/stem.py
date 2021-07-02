@@ -538,9 +538,9 @@ class StemGillespie(object):
         for _, c in enumerate(criterion[0]):
             if c is not None:
                 if criterion[1][_] == 'less':
-                    state_criterion.append(state[_] < c)
+                    state_criterion.append(state[_] < c * self.N)
                 elif criterion[1][_] == 'more':
-                    state_criterion.append(state[_] >= c)
+                    state_criterion.append(state[_] > c * self.N)
         return state_criterion
 
     def simulate_criterion(self, parameters, criterion):

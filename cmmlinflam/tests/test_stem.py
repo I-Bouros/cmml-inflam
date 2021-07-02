@@ -65,63 +65,60 @@ class TestStemGillespie(unittest.TestCase):
             (30, 3))
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, '1', 30)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, 0, 30)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, 1, 30.)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, 1, -2)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, 10, 3)
 
         with self.assertRaises(TypeError):
-            parameters = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
-            algo.simulate_fixed_times(parameters, 1, 30)
+            parameters1 = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
+            algo.simulate_fixed_times(parameters1, 1, 30)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003, 0]
-            algo.simulate_fixed_times(parameters, 1, 30)
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003, 0]
+            algo.simulate_fixed_times(parameters1, 1, 30)
 
         with self.assertRaises(TypeError):
-            parameters = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_fixed_times(parameters, 1, 30)
+            parameters1 = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixed_times(parameters1, 1, 30)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_fixed_times(parameters, 1, 30)
+            parameters1 = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixed_times(parameters1, 1, 30)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_fixed_times(parameters, 1, 30)
+            parameters1 = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixed_times(parameters1, 1, 30)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
-            algo.simulate_fixed_times(parameters, 1, 30)
+            parameters1 = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixed_times(parameters1, 1, 30)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
-            algo.simulate_fixed_times(parameters, 1, 30)
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
+            algo.simulate_fixed_times(parameters1, 1, 30)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
-            algo.simulate_fixed_times(parameters, 1, 30)
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
+            algo.simulate_fixed_times(parameters1, 1, 30)
 
     def test_simulate_criterion(self):
         algo = ci.StemGillespie()
         parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
 
+        criterion = [[0.8, 0.1, None], ['less', 'more', None]]
+
         computation_time, final_state = algo.simulate_criterion(
-            parameters, 0.2)
+            parameters, criterion)
 
         self.assertEqual(
             final_state.shape,
@@ -130,48 +127,88 @@ class TestStemGillespie(unittest.TestCase):
         self.assertEqual(type(computation_time), int)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, '0.2')
+            criterion1 = ([0.8, 0.1, None], ['less', 'more', None])
+            algo.simulate_criterion(parameters, criterion1)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, -0.2)
-
-        with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, 1.2)
+            criterion1 = [[0.8, 0.1, None]]
+            algo.simulate_criterion(parameters, criterion1)
 
         with self.assertRaises(TypeError):
-            parameters = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
-            algo.simulate_criterion(parameters, 0.2)
-
-        with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003, 0]
-            algo.simulate_criterion(parameters, 0.2)
+            criterion1 = [(0.8, 0.1, None), ['less', 'more', None]]
+            algo.simulate_criterion(parameters, criterion1)
 
         with self.assertRaises(TypeError):
-            parameters = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, 0.2)
+            criterion1 = [[0.8, 0.1, None], 'less']
+            algo.simulate_criterion(parameters, criterion1)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, 0.2)
+            criterion1 = [[0.8, 0.1], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[0.8, 0.1], ['less', 'more', None, None]]
+            algo.simulate_criterion(parameters, criterion1)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, 0.2)
+            criterion1 = [[0.8, '0.1', None], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, criterion1)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, 0.2)
+            criterion1 = [[-0.8, 0.1, None], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[0.8, 1.1, None], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[0.8, 0.1, None], [None, 'more', None]]
+            algo.simulate_criterion(parameters, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[0.8, 0.1, None], ['less', 'more', 'less']]
+            algo.simulate_criterion(parameters, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[None, None, None], [None, None, None]]
+            algo.simulate_criterion(parameters, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[0.8, 0.3, None], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, criterion1)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
-            algo.simulate_criterion(parameters, 0.2)
+            parameters1 = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
+            algo.simulate_criterion(parameters1, criterion)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
-            algo.simulate_criterion(parameters, 0.2)
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003, 0]
+            algo.simulate_criterion(parameters1, criterion)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters1, criterion)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters1, criterion)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters1, criterion)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters1, criterion)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
+            algo.simulate_criterion(parameters1, criterion)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
+            algo.simulate_criterion(parameters1, criterion)
 
 
 class TestStemGillespieTIMEVAR(unittest.TestCase):
@@ -231,52 +268,47 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
             (100, 3))
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, switch_times, '1', 30)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, switch_times, 0, 30)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, switch_times, 1, 30.)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, switch_times, 1, -2)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
             algo.simulate_fixed_times(parameters, switch_times, 10, 3)
 
         with self.assertRaises(ValueError):
-            switch_times = [0, 1, 2]
-            algo.simulate_fixed_times(parameters, switch_times, 1, 30)
+            switch_times1 = [0, 1, 2]
+            algo.simulate_fixed_times(parameters, switch_times1, 1, 30)
 
         with self.assertRaises(ValueError):
-            switch_times = [[0], [1], [2]]
-            algo.simulate_fixed_times(parameters, switch_times, 1, 30)
+            switch_times1 = [[0], [1], [2]]
+            algo.simulate_fixed_times(parameters, switch_times1, 1, 30)
 
         with self.assertRaises(TypeError):
-            switch_times = [[0, 1], ['5', 0], [10, 1], [20, 0]]
-            algo.simulate_fixed_times(parameters, switch_times, 1, 30)
+            switch_times1 = [[0, 1], ['5', 0], [10, 1], [20, 0]]
+            algo.simulate_fixed_times(parameters, switch_times1, 1, 30)
 
         with self.assertRaises(ValueError):
-            switch_times = [[0, 1], [-5, 0], [10, 1], [20, 0]]
-            algo.simulate_fixed_times(parameters, switch_times, 1, 30)
+            switch_times1 = [[0, 1], [-5, 0], [10, 1], [20, 0]]
+            algo.simulate_fixed_times(parameters, switch_times1, 1, 30)
 
         with self.assertRaises(TypeError):
-            switch_times = [[0, 1], [5, 0], [10, '1'], [20, 0]]
-            algo.simulate_fixed_times(parameters, switch_times, 1, 30)
+            switch_times1 = [[0, 1], [5, 0], [10, '1'], [20, 0]]
+            algo.simulate_fixed_times(parameters, switch_times1, 1, 30)
 
         with self.assertRaises(ValueError):
-            switch_times = [[0, 1], [5, 0], [10, -1], [20, 0]]
-            algo.simulate_fixed_times(parameters, switch_times, 1, 30)
+            switch_times1 = [[0, 1], [5, 0], [10, -1], [20, 0]]
+            algo.simulate_fixed_times(parameters, switch_times1, 1, 30)
 
         with self.assertRaises(ValueError):
-            switch_times = [[2, 1], [5, 0], [10, 1], [20, 0]]
-            algo.simulate_fixed_times(parameters, switch_times, 1, 30)
+            switch_times1 = [[2, 1], [5, 0], [10, 1], [20, 0]]
+            algo.simulate_fixed_times(parameters, switch_times1, 1, 30)
 
         with self.assertRaises(TypeError):
             parameters = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
@@ -315,8 +347,10 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
         parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
         switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
+        criterion = [[0.8, 0.1, None], ['less', 'more', None]]
+
         computation_time, final_state = algo.simulate_criterion(
-            parameters, switch_times, 0.2)
+            parameters, switch_times, criterion)
 
         self.assertEqual(
             final_state.shape,
@@ -325,73 +359,113 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
         self.assertEqual(type(computation_time), int)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, switch_times, '0.2')
+            criterion1 = ([0.8, 0.1, None], ['less', 'more', None])
+            algo.simulate_criterion(parameters, switch_times, criterion1)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, switch_times, -0.2)
-
-        with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, switch_times, 1.2)
-
-        with self.assertRaises(ValueError):
-            switch_times = [0, 1, 2]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
-
-        with self.assertRaises(ValueError):
-            switch_times = [[0], [1], [2]]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            criterion1 = [[0.8, 0.1, None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
 
         with self.assertRaises(TypeError):
-            switch_times = [[0, 1], ['5', 0], [10, 1], [20, 0]]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
-
-        with self.assertRaises(ValueError):
-            switch_times = [[0, 1], [-5, 0], [10, 1], [20, 0]]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            criterion1 = [(0.8, 0.1, None), ['less', 'more', None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
 
         with self.assertRaises(TypeError):
-            switch_times = [[0, 1], [5, 0], [10, '1'], [20, 0]]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            criterion1 = [[0.8, 0.1, None], 'less']
+            algo.simulate_criterion(parameters, switch_times, criterion1)
 
         with self.assertRaises(ValueError):
-            switch_times = [[0, 1], [5, 0], [10, -1], [20, 0]]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            criterion1 = [[0.8, 0.1], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
 
         with self.assertRaises(ValueError):
-            switch_times = [[2, 1], [5, 0], [10, 1], [20, 0]]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            criterion1 = [[0.8, 0.1], ['less', 'more', None, None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
 
         with self.assertRaises(TypeError):
-            parameters = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            criterion1 = [[0.8, '0.1', None], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003, 0]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            criterion1 = [[-0.8, 0.1, None], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[0.8, 1.1, None], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[0.8, 0.1, None], [None, 'more', None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[0.8, 0.1, None], ['less', 'more', 'less']]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[None, None, None], [None, None, None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
+
+        with self.assertRaises(ValueError):
+            criterion1 = [[0.8, 0.3, None], ['less', 'more', None]]
+            algo.simulate_criterion(parameters, switch_times, criterion1)
+
+        with self.assertRaises(ValueError):
+            switch_times1 = [0, 1, 2]
+            algo.simulate_criterion(parameters, switch_times1, criterion)
+
+        with self.assertRaises(ValueError):
+            switch_times1 = [[0], [1], [2]]
+            algo.simulate_criterion(parameters, switch_times1, criterion)
 
         with self.assertRaises(TypeError):
-            parameters = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            switch_times1 = [[0, 1], ['5', 0], [10, 1], [20, 0]]
+            algo.simulate_criterion(parameters, switch_times1, criterion)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            switch_times1 = [[0, 1], [-5, 0], [10, 1], [20, 0]]
+            algo.simulate_criterion(parameters, switch_times1, criterion)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            switch_times1 = [[0, 1], [5, 0], [10, '1'], [20, 0]]
+            algo.simulate_criterion(parameters, switch_times1, criterion)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            switch_times1 = [[0, 1], [5, 0], [10, -1], [20, 0]]
+            algo.simulate_criterion(parameters, switch_times1, criterion)
+
+        with self.assertRaises(ValueError):
+            switch_times1 = [[2, 1], [5, 0], [10, 1], [20, 0]]
+            algo.simulate_criterion(parameters, switch_times1, criterion)
 
         with self.assertRaises(TypeError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            parameters1 = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
+            algo.simulate_criterion(parameters1, switch_times, criterion)
 
         with self.assertRaises(ValueError):
-            parameters = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
-            algo.simulate_criterion(parameters, switch_times, 0.2)
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003, 0]
+            algo.simulate_criterion(parameters1, switch_times, criterion)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters1, switch_times, criterion)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters1, switch_times, criterion)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters1, switch_times, criterion)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
+            algo.simulate_criterion(parameters1, switch_times, criterion)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
+            algo.simulate_criterion(parameters1, switch_times, criterion)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
+            algo.simulate_criterion(parameters1, switch_times, criterion)

@@ -454,6 +454,23 @@ class StemGillespie(object):
 
         """
         # Check correct format of output
+        self._check_times(start_time, end_time)
+
+        self._check_parameters_format(parameters)
+        self._set_parameters(parameters)
+
+        times = range(start_time, end_time+1)
+        sol = self.gillespie_algorithm_fixed_times(times)
+
+        output = sol['state']
+
+        return output
+
+    def _check_times(self, start_time, end_time):
+        """
+        Checks format of start and end of simulation window.
+
+        """
         if not isinstance(start_time, int):
             raise TypeError('Start time of siumlation must be integer.')
         if start_time <= 0:
@@ -466,16 +483,6 @@ class StemGillespie(object):
 
         if start_time > end_time:
             raise ValueError('End time must be after start time.')
-
-        self._check_parameters_format(parameters)
-        self._set_parameters(parameters)
-
-        times = range(start_time, end_time+1)
-        sol = self.gillespie_algorithm_fixed_times(times)
-
-        output = sol['state']
-
-        return output
 
     def _set_parameters(self, parameters):
         """
@@ -504,21 +511,37 @@ class StemGillespie(object):
         Parameters
         ----------
         criterion
-            (float) Percentage threshold of WT cells in the population
-            for disease to be triggered.
+            (list of 2 lists) List of percentage thresholds of cell types in
+            the population for disease to be triggered and another containing
+            the type of threshold imposed.
 
         """
         # Split compartments into their types
         i_WT, i_A, i_B = self.init_cond
 
         time_to_criterion = 0
-        while i_WT > criterion * self.N:
+        while all(self._evaluate_criterion(criterion, i_WT, i_A, i_B)):
             i_WT, i_A, i_B = self.one_step_gillespie(i_WT, i_A, i_B)
             time_to_criterion += 1
 
         return ({
             'time': time_to_criterion,
             'state': np.array([i_WT, i_A, i_B], dtype=np.int)})
+
+    def _evaluate_criterion(self, criterion, i_WT, i_A, i_B):
+        """
+        Evaluates if criterion for stopping the simulation is met.
+
+        """
+        state = [i_WT, i_A, i_B]
+        state_criterion = []
+        for _, c in enumerate(criterion[0]):
+            if c is not None:
+                if criterion[1][_] == 'less':
+                    state_criterion.append(state[_] < c)
+                elif criterion[1][_] == 'more':
+                    state_criterion.append(state[_] >= c)
+        return state_criterion
 
     def simulate_criterion(self, parameters, criterion):
         r"""
@@ -535,18 +558,13 @@ class StemGillespie(object):
             with which a WT cell transforms into an A and B variant,
             respectively.
         criterion
-            (float) Percentage threshold of WT cells in the population
-            for disease to be triggered.
+            (list of 2 lists) List of percentage thresholds of cell types in
+            the population for disease to be triggered and another containing
+            the type of threshold imposed.
 
         """
         # Check correct format of output
-        if not isinstance(criterion, (float, int)):
-            raise TypeError(
-                'Start time of siumlation must be integer or float.')
-        if criterion < 0:
-            raise ValueError('Start time of siumlation must be >= 0.')
-        if criterion > 1:
-            raise ValueError('Start time of siumlation must be <= 1.')
+        self._check_criterion(criterion)
 
         self._check_parameters_format(parameters)
         self._set_parameters(parameters)
@@ -557,6 +575,56 @@ class StemGillespie(object):
         final_state = sol['state']
 
         return computation_time, final_state
+
+    def _check_criterion(self, criterion):
+        """
+        Checks format of the criterion input for the simulation.
+
+        """
+        if not isinstance(criterion, list):
+            raise TypeError(
+                'Simulation criterion storage format must be a list.')
+        if len(criterion) != 2:
+            raise ValueError(
+                'Simulation criterion storage format must be a list \
+                    containing two distinct lists.')
+
+        for part in criterion:
+            if not isinstance(part, list):
+                raise TypeError(
+                    'Each part in the simulation criterion storage format \
+                        must be a list.')
+            if len(part) != 3:
+                raise ValueError(
+                    'Simulation criterion storage format must be a list of \
+                        length 3.')
+
+        for _, c in enumerate(criterion[0]):
+            if not isinstance(c, (float, int)) and (c is not None):
+                raise TypeError(
+                    'Threshold value for siumlation must be integer, float or \
+                        None.')
+            if c is not None:
+                if c < 0:
+                    raise ValueError('Threshold value for siumlation must \
+                        be >= 0.')
+                if c > 1:
+                    raise ValueError('Threshold value for siumlation must \
+                        be <= 1.')
+                if criterion[1][_] not in ['less', 'more']:
+                    raise ValueError('For no given threshold value, we must\
+                        have either the `less` or `more` keyword.')
+            else:
+                if criterion[1][_] is not None:
+                    raise ValueError('For no given threshold value, we must\
+                        have no keyword.')
+
+        if criterion[0] == [None, None, None]:
+            raise ValueError('Cannot have all criterion thresholds absent.')
+
+        if sum(filter(None, criterion[0])) > 1:
+            raise ValueError('Cannot have all criterion thresholds sum to more \
+                than 1.')
 
     def _check_parameters_format(self, parameters):
         """
@@ -1003,18 +1071,7 @@ class StemGillespieTIMEVAR(StemGillespie):
 
         """
         # Check correct format of output
-        if not isinstance(start_time, int):
-            raise TypeError('Start time of siumlation must be integer.')
-        if start_time <= 0:
-            raise ValueError('Start time of siumlation must be > 0.')
-
-        if not isinstance(end_time, int):
-            raise TypeError('End time of siumlation must be integer.')
-        if end_time <= 0:
-            raise ValueError('Start time of siumlation must be > 0.')
-
-        if start_time > end_time:
-            raise ValueError('End time must be after start time.')
+        self._check_times(start_time, end_time)
 
         self._check_parameters_format(parameters)
         self._set_parameters(parameters)
@@ -1071,15 +1128,16 @@ class StemGillespieTIMEVAR(StemGillespie):
         Parameters
         ----------
         criterion
-            (float) Percentage threshold of WT cells in the population
-            for disease to be triggered.
+            (list of 2 lists) List of percentage thresholds of cell types in
+            the population for disease to be triggered and another containing
+            the type of threshold imposed.
 
         """
         # Split compartments into their types
         i_WT, i_A, i_B = self.init_cond
 
         time_to_criterion = 0
-        while i_WT > criterion * self.N:
+        while all(self._evaluate_criterion(criterion, i_WT, i_A, i_B)):
             i_WT, i_A, i_B = self.one_step_gillespie(
                 time_to_criterion, i_WT, i_A, i_B)
             time_to_criterion += 1
@@ -1108,18 +1166,13 @@ class StemGillespieTIMEVAR(StemGillespie):
             indicates the time of change and the second indicate the level
             of the environment -- 0 for LOW; 1 for HIGH.
         criterion
-            (float) Percentage threshold of WT cells in the population
-            for disease to be triggered.
+            (list of 2 lists) List of percentage thresholds of cell types in
+            the population for disease to be triggered and another containing
+            the type of threshold imposed.
 
         """
         # Check correct format of output
-        if not isinstance(criterion, (float, int)):
-            raise TypeError(
-                'Start time of siumlation must be integer or float.')
-        if criterion < 0:
-            raise ValueError('Start time of siumlation must be >= 0.')
-        if criterion > 1:
-            raise ValueError('Start time of siumlation must be <= 1.')
+        self._check_criterion(criterion)
 
         self._check_parameters_format(parameters)
         self._set_parameters(parameters)

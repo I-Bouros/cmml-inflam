@@ -545,8 +545,8 @@ class StemGillespie(object):
 
     def simulate_criterion(self, parameters, criterion):
         r"""
-        Computes the number of each type of cell in a given tumor between the
-        given time points.
+        Computes the number of each type of cell in a given tumor until a
+        criterion is met.
 
         Parameters
         ----------
@@ -1148,8 +1148,8 @@ class StemGillespieTIMEVAR(StemGillespie):
 
     def simulate_criterion(self, parameters, switch_times, criterion):
         r"""
-        Computes the number of each type of cell in a given tumor between the
-        given time points.
+        Computes the number of each type of cell in a given tumor until a
+        criterion is met.
 
         Parameters
         ----------

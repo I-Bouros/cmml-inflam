@@ -56,7 +56,7 @@ class TestStemGillespie(unittest.TestCase):
 
     def test_simulate_fixed_times(self):
         algo = ci.StemGillespie()
-        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        parameters = [1, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
 
         output_algorithm = algo.simulate_fixed_times(parameters, 1, 30)
 
@@ -385,7 +385,7 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
 
     def test_simulate_criterion(self):
         algo = ci.StemGillespieTIMEVAR()
-        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        parameters = [1, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
         switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
         criterion = [[0.1, 0.8, None], ['less', 'more', None]]

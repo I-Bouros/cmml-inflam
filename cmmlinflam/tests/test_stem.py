@@ -513,7 +513,16 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
 
     def test_simulate_fixation(self):
         algo = ci.StemGillespieTIMEVAR()
-        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        parameters = [0, 100, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
+
+        computation_time, fixed_state = algo.simulate_fixation(
+            parameters, switch_times)
+
+        self.assertEqual(type(fixed_state), str)
+        self.assertEqual(type(computation_time), int)
+
+        parameters = [0, 0, 100, 0.5, 0.1, 0.1, 0.2, 0.3]
         switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
         computation_time, fixed_state = algo.simulate_fixation(

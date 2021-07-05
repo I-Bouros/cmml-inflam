@@ -115,7 +115,7 @@ class TestStemGillespie(unittest.TestCase):
         algo = ci.StemGillespie()
         parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
 
-        criterion = [[0.8, 0.1, None], ['less', 'more', None]]
+        criterion = [[0.1, 0.8, None], ['less', 'more', None]]
 
         computation_time, final_state = algo.simulate_criterion(
             parameters, criterion)
@@ -388,7 +388,7 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
         parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
         switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
-        criterion = [[0.8, 0.1, None], ['less', 'more', None]]
+        criterion = [[0.1, 0.8, None], ['less', 'more', None]]
 
         computation_time, final_state = algo.simulate_criterion(
             parameters, switch_times, criterion)

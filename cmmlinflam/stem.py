@@ -654,6 +654,58 @@ class StemGillespie(object):
             if parameters[_] < 0:
                 raise ValueError('Mutation rate must be => 0.')
 
+    def gillespie_algorithm_fixation(self):
+        """
+        Runs the Gillespie algorithm for the STEM cell population
+        until fixation.
+
+        """
+        # Split compartments into their types
+        i_WT, i_A, i_B = self.init_cond
+
+        time_to_criterion = 0
+        while (i_WT > 0) and (i_A > 0) and (i_B > 0):
+            i_WT, i_A, i_B = self.one_step_gillespie(i_WT, i_A, i_B)
+            time_to_criterion += 1
+
+        if i_WT == self.N:
+            fixed_species = 'WT'
+        elif i_A == self.N:
+            fixed_species = 'A'
+        else:
+            fixed_species = 'B'
+
+        return ({
+            'time': time_to_criterion,
+            'state': fixed_species})
+
+    def simulate_fixation(self, parameters):
+        r"""
+        Computes the number of each type of cell in a given tumor until
+        fixation.
+
+        Parameters
+        ----------
+        parameters
+            (list) List of quantities that characterise the STEM cells cycle in
+            this order: the initial counts for each type of cell (i_WT, i_A,
+            i_B), the growth rate for the WT, the boosts in selection given to
+            the mutated A and B variant respectively and the mutation rates
+            with which a WT cell transforms into an A and B variant,
+            respectively.
+
+        """
+        # Check correct format of output
+        self._check_parameters_format(parameters)
+        self._set_parameters(parameters)
+
+        sol = self.gillespie_algorithm_fixation()
+
+        computation_time = sol['time']
+        fixed_species = sol['state']
+
+        return computation_time, fixed_species
+
 
 class StemGillespieTIMEVAR(StemGillespie):
     r"""StemGillespieTIMEVAR Class:
@@ -1186,3 +1238,64 @@ class StemGillespieTIMEVAR(StemGillespie):
         final_state = sol['state']
 
         return computation_time, final_state
+
+    def gillespie_algorithm_fixation(self):
+        """
+        Runs the Gillespie algorithm for the STEM cell population
+        until fixation.
+
+        """
+        # Split compartments into their types
+        i_WT, i_A, i_B = self.init_cond
+
+        time_to_criterion = 0
+        while (i_WT > 0) and (i_A > 0) and (i_B > 0):
+            i_WT, i_A, i_B = self.one_step_gillespie(
+                time_to_criterion, i_WT, i_A, i_B)
+            time_to_criterion += 1
+
+        if i_WT == self.N:
+            fixed_species = 'WT'
+        elif i_A == self.N:
+            fixed_species = 'A'
+        else:
+            fixed_species = 'B'
+
+        return ({
+            'time': time_to_criterion,
+            'state': fixed_species})
+
+    def simulate_fixation(self, parameters, switch_times):
+        r"""
+        Computes the number of each type of cell in a given tumor until
+        fixation.
+
+        Parameters
+        ----------
+        parameters
+            (list) List of quantities that characterise the STEM cells cycle in
+            this order: the initial counts for each type of cell (i_WT, i_A,
+            i_B), the growth rate for the WT, the boosts in selection given to
+            the mutated A and B variant respectively and the mutation rates
+            with which a WT cell transforms into an A and B variant,
+            respectively.
+        switch_times
+            (list of lists) Array of the times at which the environmental
+            conditions accounted for the B cell line. The first column
+            indicates the time of change and the second indicate the level
+            of the environment -- 0 for LOW; 1 for HIGH.
+
+        """
+        # Check correct format of output
+        self._check_parameters_format(parameters)
+        self._set_parameters(parameters)
+
+        self._check_switch_times(switch_times)
+        self.switches = np.asarray(switch_times)
+
+        sol = self.gillespie_algorithm_fixation()
+
+        computation_time = sol['time']
+        fixed_species = sol['state']
+
+        return computation_time, fixed_species

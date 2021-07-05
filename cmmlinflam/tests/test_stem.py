@@ -210,6 +210,47 @@ class TestStemGillespie(unittest.TestCase):
             parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
             algo.simulate_criterion(parameters1, criterion)
 
+    def test_simulate_fixation(self):
+        algo = ci.StemGillespie()
+        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+
+        computation_time, fixed_state = algo.simulate_fixation(parameters)
+
+        self.assertEqual(type(fixed_state), str)
+        self.assertEqual(type(computation_time), int)
+
+        with self.assertRaises(TypeError):
+            parameters1 = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
+            algo.simulate_fixation(parameters1)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003, 0]
+            algo.simulate_fixation(parameters1)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixation(parameters1)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixation(parameters1)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixation(parameters1)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixation(parameters1)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
+            algo.simulate_fixation(parameters1)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
+            algo.simulate_fixation(parameters1)
+
 
 class TestStemGillespieTIMEVAR(unittest.TestCase):
     """
@@ -469,3 +510,74 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
         with self.assertRaises(ValueError):
             parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
             algo.simulate_criterion(parameters1, switch_times, criterion)
+
+    def test_simulate_fixation(self):
+        algo = ci.StemGillespieTIMEVAR()
+        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
+
+        computation_time, fixed_state = algo.simulate_fixation(
+            parameters, switch_times)
+
+        self.assertEqual(type(fixed_state), str)
+        self.assertEqual(type(computation_time), int)
+
+        with self.assertRaises(ValueError):
+            switch_times1 = [0, 1, 2]
+            algo.simulate_fixation(parameters, switch_times1)
+
+        with self.assertRaises(ValueError):
+            switch_times1 = [[0], [1], [2]]
+            algo.simulate_fixation(parameters, switch_times1)
+
+        with self.assertRaises(TypeError):
+            switch_times1 = [[0, 1], ['5', 0], [10, 1], [20, 0]]
+            algo.simulate_fixation(parameters, switch_times1)
+
+        with self.assertRaises(ValueError):
+            switch_times1 = [[0, 1], [-5, 0], [10, 1], [20, 0]]
+            algo.simulate_fixation(parameters, switch_times1)
+
+        with self.assertRaises(TypeError):
+            switch_times1 = [[0, 1], [5, 0], [10, '1'], [20, 0]]
+            algo.simulate_fixation(parameters, switch_times1)
+
+        with self.assertRaises(ValueError):
+            switch_times1 = [[0, 1], [5, 0], [10, -1], [20, 0]]
+            algo.simulate_fixation(parameters, switch_times1)
+
+        with self.assertRaises(ValueError):
+            switch_times1 = [[2, 1], [5, 0], [10, 1], [20, 0]]
+            algo.simulate_fixation(parameters, switch_times1)
+
+        with self.assertRaises(TypeError):
+            parameters1 = (100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003)
+            algo.simulate_fixation(parameters1, switch_times)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, 0.003, 0]
+            algo.simulate_fixation(parameters1, switch_times)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, '0', 0, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixation(parameters1, switch_times)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, -2, 0.5, 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixation(parameters1, switch_times)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, 0, 0, '0.5', 0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixation(parameters1, switch_times)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, -0.001, 0.01, 0.002, 0.003]
+            algo.simulate_fixation(parameters1, switch_times)
+
+        with self.assertRaises(TypeError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, '0.002', 0.003]
+            algo.simulate_fixation(parameters1, switch_times)
+
+        with self.assertRaises(ValueError):
+            parameters1 = [100, 0, 0, 0.5, 0.001, 0.01, 0.002, -0.003]
+            algo.simulate_fixation(parameters1, switch_times)

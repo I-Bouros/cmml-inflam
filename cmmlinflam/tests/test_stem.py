@@ -56,7 +56,7 @@ class TestStemGillespie(unittest.TestCase):
 
     def test_simulate_fixed_times(self):
         algo = ci.StemGillespie()
-        parameters = [1, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        parameters = [10, 10, 10, 0.5, 0.1, 0.1, 0.2, 0.3]
 
         output_algorithm = algo.simulate_fixed_times(parameters, 1, 30)
 
@@ -113,7 +113,7 @@ class TestStemGillespie(unittest.TestCase):
 
     def test_simulate_criterion(self):
         algo = ci.StemGillespie()
-        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        parameters = [10, 10, 10, 0.5, 0.1, 0.1, 0.2, 0.3]
 
         criterion = [[0.1, 0.8, None], ['less', 'more', None]]
 
@@ -212,7 +212,28 @@ class TestStemGillespie(unittest.TestCase):
 
     def test_simulate_fixation(self):
         algo = ci.StemGillespie()
+        parameters = [10, 10, 10, 0.5, 0.1, 0.1, 0.2, 0.3]
+
+        computation_time, fixed_state = algo.simulate_fixation(parameters)
+
+        self.assertEqual(type(fixed_state), str)
+        self.assertEqual(type(computation_time), int)
+
         parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+
+        computation_time, fixed_state = algo.simulate_fixation(parameters)
+
+        self.assertEqual(type(fixed_state), str)
+        self.assertEqual(type(computation_time), int)
+
+        parameters = [0, 100, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+
+        computation_time, fixed_state = algo.simulate_fixation(parameters)
+
+        self.assertEqual(type(fixed_state), str)
+        self.assertEqual(type(computation_time), int)
+
+        parameters = [0, 0, 100, 0.5, 0.1, 0.1, 0.2, 0.3]
 
         computation_time, fixed_state = algo.simulate_fixation(parameters)
 
@@ -298,7 +319,7 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
 
     def test_simulate_fixed_times(self):
         algo = ci.StemGillespieTIMEVAR()
-        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        parameters = [10, 10, 10, 0.5, 0.1, 0.1, 0.2, 0.3]
         switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
         output_algorithm = algo.simulate_fixed_times(
@@ -385,7 +406,7 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
 
     def test_simulate_criterion(self):
         algo = ci.StemGillespieTIMEVAR()
-        parameters = [1, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        parameters = [10, 10, 10, 0.5, 0.1, 0.1, 0.2, 0.3]
         switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
         criterion = [[0.1, 0.8, None], ['less', 'more', None]]
@@ -513,7 +534,7 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
 
     def test_simulate_fixation(self):
         algo = ci.StemGillespieTIMEVAR()
-        parameters = [0, 100, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        parameters = [10, 10, 10, 0.5, 0.1, 0.1, 0.2, 0.3]
         switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
         computation_time, fixed_state = algo.simulate_fixation(
@@ -523,6 +544,24 @@ class TestStemGillespieTIMEVAR(unittest.TestCase):
         self.assertEqual(type(computation_time), int)
 
         parameters = [0, 0, 100, 0.5, 0.1, 0.1, 0.2, 0.3]
+        switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
+
+        computation_time, fixed_state = algo.simulate_fixation(
+            parameters, switch_times)
+
+        self.assertEqual(type(fixed_state), str)
+        self.assertEqual(type(computation_time), int)
+
+        parameters = [100, 0, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
+        switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
+
+        computation_time, fixed_state = algo.simulate_fixation(
+            parameters, switch_times)
+
+        self.assertEqual(type(fixed_state), str)
+        self.assertEqual(type(computation_time), int)
+
+        parameters = [0, 100, 0, 0.5, 0.1, 0.1, 0.2, 0.3]
         switch_times = [[0, 1], [5, 0], [10, 1], [20, 0]]
 
         computation_time, fixed_state = algo.simulate_fixation(

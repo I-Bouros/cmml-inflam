@@ -664,7 +664,7 @@ class StemGillespie(object):
         i_WT, i_A, i_B = self.init_cond
 
         time_to_criterion = 0
-        while (i_WT > 0) and (i_A > 0) and (i_B > 0):
+        while self._fixation_condition(i_WT, i_A, i_B):
             i_WT, i_A, i_B = self.one_step_gillespie(i_WT, i_A, i_B)
             time_to_criterion += 1
 
@@ -678,6 +678,18 @@ class StemGillespie(object):
         return ({
             'time': time_to_criterion,
             'state': fixed_species})
+
+    def _fixation_condition(self, i_WT, i_A, i_B):
+        if i_WT == self.N:
+            cond = False
+        elif i_A == self.N:
+            cond = False
+        elif i_B == self.N:
+            cond = False
+        else:
+            cond = True
+
+        return cond
 
     def simulate_fixation(self, parameters):
         r"""
@@ -1249,7 +1261,7 @@ class StemGillespieTIMEVAR(StemGillespie):
         i_WT, i_A, i_B = self.init_cond
 
         time_to_criterion = 0
-        while (i_WT > 0) and (i_A > 0) and (i_B > 0):
+        while self._fixation_condition(i_WT, i_A, i_B):
             i_WT, i_A, i_B = self.one_step_gillespie(
                 time_to_criterion, i_WT, i_A, i_B)
             time_to_criterion += 1

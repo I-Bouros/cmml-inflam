@@ -38,7 +38,15 @@ import cmmlinflam
 
 # create and run a Gillespie routine for a STEM cell population for given time frame
 algo = cmmlinflam.StemGillespie()
-algo.simulate(parameters, start_time, end_time)
+algo.simulate_fixed_times(parameters, start_time, end_time)
+
+# create and run a Gillespie routine for a STEM cell population until criterion is met
+algo = cmmlinflam.StemGillespie()
+algo.simulate_criterion(parameters, criterion)
+
+# create and run a Gillespie routine for a STEM cell population until fixation
+algo = cmmlinflam.StemGillespie()
+algo.simulate_fixation(parameters)
 ```
 
 ## Contributing

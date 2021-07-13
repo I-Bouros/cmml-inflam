@@ -374,9 +374,6 @@ class StemGillespie(object):
         # Generate random number for reaction and time to next reaction
         u, u1 = uniform.rvs(size=2)
 
-        # tot_growth_rate = self.alpha_WT * i_WT + (
-        #    self.alpha_A * i_A) + self.alpha_B * i_B
-
         # Time to next reaction
         tau = np.log(1/u1)
 
@@ -429,8 +426,10 @@ class StemGillespie(object):
             (int) Time at which we end the simulation of the tumor.
 
         """
+        # Create timeline vector
         times = np.arange(start_time, end_time+0.5, 1, dtype=np.int)
         interval = end_time - start_time + 1
+
         # Split compartments into their types
         i_WT, i_A, i_B = self.init_cond
 
@@ -1063,7 +1062,8 @@ class StemGillespieTIMEVAR(StemGillespie):
         """
         Computes one step in the Gillespie algorithm to determine the
         counts of the different species of cells living in the tumor at
-        present.
+        present. Returns time to next reaction and the tuple state of the
+        system.
 
         Parameters
         ----------
@@ -1080,8 +1080,11 @@ class StemGillespieTIMEVAR(StemGillespie):
             time point.
 
         """
-        # Generate random number
-        u = uniform.rvs(size=1)
+        # Generate random number for reaction and time to next reaction
+        u, u1 = uniform.rvs(size=2)
+
+        # Time to next reaction
+        tau = np.log(1/u1)
 
         # Compute propensities
         propens_1 = self._prob_WT_to_B(t, i_WT, i_A, i_B)
@@ -1098,9 +1101,7 @@ class StemGillespieTIMEVAR(StemGillespie):
         for e in range(propens.shape[0]):
             sum_propens[e] = np.sum(propens[:(e+1)])
 
-        if u >= sum_propens[5]:
-            pass
-        elif u < sum_propens[0]:
+        if u < sum_propens[0]:
             i_WT += -1
             i_B += 1
         elif (u >= sum_propens[0]) and (u < sum_propens[1]):
@@ -1119,27 +1120,53 @@ class StemGillespieTIMEVAR(StemGillespie):
             i_A += 1
             i_B += -1
 
-        return (i_WT, i_A, i_B)
+        return (tau, i_WT, i_A, i_B)
 
-    def gillespie_algorithm_fixed_times(self, times):
+    def gillespie_algorithm_fixed_times(self, start_time, end_time):
         """
         Runs the Gillespie algorithm for the STEM cell population
         for the given times.
 
         Parameters
         ----------
-        times
-            (list) Vector of the times for which the run the Gillespie
-            algorithm.
+        start_time
+            (int) Time from which we start the simulation of the tumor.
+        end_time
+            (int) Time at which we end the simulation of the tumor.
 
         """
+        # Create timeline vector
+        times = np.arange(start_time, end_time+0.5, 1, dtype=np.int)
+        interval = end_time - start_time + 1
+
         # Split compartments into their types
         i_WT, i_A, i_B = self.init_cond
 
-        solution = np.empty((len(times), 3), dtype=np.int)
-        for t, _ in enumerate(times):
-            solution[t, :] = [i_WT, i_A, i_B]
-            i_WT, i_A, i_B = self.one_step_gillespie(t, i_WT, i_A, i_B)
+        large_solution = []
+        time_solution = []
+        solution = np.empty((interval, 3), dtype=np.int)
+        current_time = start_time
+        while current_time <= end_time:
+            time_solution.append(current_time)
+            large_solution.append([i_WT, i_A, i_B])
+            tau, i_WT, i_A, i_B = self.one_step_gillespie(
+                current_time, i_WT, i_A, i_B)
+            current_time += tau
+
+        eval_indices = np.where(
+            np.array([(t in time_solution) for t in times]))[0].tolist()
+
+        ind_in_times = []
+        j = 0
+        for i, t in enumerate(eval_indices):
+            if t < eval_indices[-1]:
+                ind_in_times.extend([j]*(eval_indices[i+1]-eval_indices[i]))
+            else:
+                ind_in_times.extend([j]*(times[-1]-eval_indices[i]))
+            j += 1
+
+        for t in range(interval):
+            solution[t, :] = large_solution[ind_in_times[t]]
 
         return({'state': solution})
 
@@ -1178,8 +1205,7 @@ class StemGillespieTIMEVAR(StemGillespie):
         self._check_switch_times(switch_times)
         self.switches = np.asarray(switch_times)
 
-        times = range(start_time, end_time+1)
-        sol = self.gillespie_algorithm_fixed_times(times)
+        sol = self.gillespie_algorithm_fixed_times(start_time, end_time)
 
         output = sol['state']
 
@@ -1237,9 +1263,9 @@ class StemGillespieTIMEVAR(StemGillespie):
 
         time_to_criterion = 0
         while all(self._evaluate_criterion(criterion, i_WT, i_A, i_B)):
-            i_WT, i_A, i_B = self.one_step_gillespie(
+            tau, i_WT, i_A, i_B = self.one_step_gillespie(
                 time_to_criterion, i_WT, i_A, i_B)
-            time_to_criterion += 1
+            time_to_criterion += tau
 
         return ({
             'time': int(time_to_criterion),
@@ -1297,9 +1323,9 @@ class StemGillespieTIMEVAR(StemGillespie):
 
         time_to_fixation = 0
         while self._fixation_condition(i_WT, i_A, i_B):
-            i_WT, i_A, i_B = self.one_step_gillespie(
+            tau, i_WT, i_A, i_B = self.one_step_gillespie(
                 time_to_fixation, i_WT, i_A, i_B)
-            time_to_fixation += 1
+            time_to_fixation += tau
 
         if i_WT == self.N:
             fixed_species = 'WT'

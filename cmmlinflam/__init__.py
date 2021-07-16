@@ -15,4 +15,4 @@ It contains functionality for creating forward simulations .
 from .version_info import VERSION_INT, VERSION  # noqa
 
 # Import main classes
-from .stem import StemGillespie, StemGillespieTIMEVAR  # noqa
+from .stem_gillespie import StemGillespie, StemGillespieTIMEVAR  # noqa

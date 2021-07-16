@@ -9,7 +9,7 @@ Welcome to cmmlinflam's documentation!
 This is the documentation for the implementation of a collection of stochastic processes models used in the modelling of the effect of inflammation in the evolution of CMML.
 
 .. toctree::
-   stem
+   stem_gillespie
 
 
 

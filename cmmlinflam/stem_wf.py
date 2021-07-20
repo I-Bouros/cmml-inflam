@@ -630,7 +630,8 @@ class StemWFTIMEVAR(StemGillespieTIMEVAR):
         solution = np.empty((interval, 3), dtype=np.int)
         current_time = start_time
         for t in range(interval):
-            i_WT, i_A, i_B = self.one_step_wf(i_WT, i_A, i_B)
+            i_WT, i_A, i_B = self.one_step_wf(
+                current_time, i_WT, i_A, i_B)
             solution[t, :] = np.array([i_WT, i_A, i_B])
             current_time += 1
 

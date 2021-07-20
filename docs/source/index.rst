@@ -10,6 +10,7 @@ This is the documentation for the implementation of a collection of stochastic p
 
 .. toctree::
    stem_gillespie
+   stem_wf
 
 
 

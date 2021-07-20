@@ -16,3 +16,4 @@ from .version_info import VERSION_INT, VERSION  # noqa
 
 # Import main classes
 from .stem_gillespie import StemGillespie, StemGillespieTIMEVAR  # noqa
+from .stem_wf import StemWF, StemWFTIMEVAR  # noqa

@@ -671,7 +671,7 @@ class StemWFTIMEVAR(StemGillespieTIMEVAR):
         self._check_switch_times(switch_times)
         self.switches = np.asarray(switch_times)
 
-        sol = self.gillespie_algorithm_fixed_times(start_time, end_time)
+        sol = self.wf_algorithm_fixed_times(start_time, end_time)
 
         output = sol['state']
 

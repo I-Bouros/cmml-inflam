@@ -143,7 +143,8 @@ def doctest_rst_and_public_interface():
     # this list.
     cmmlinflam_submodules = [
         'cmmlinflam.version_info',
-        'cmmlinflam.stem_gillespie'
+        'cmmlinflam.stem_gillespie',
+        'cmmlinflam.stem_wf'
         ]
 
     doc_symbols = get_all_documented_symbols()

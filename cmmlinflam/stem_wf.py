@@ -304,7 +304,7 @@ class StemWF(StemGillespie):
             time_to_criterion += 1
 
         return ({
-            'steps': time_to_criterion * self.N,
+            'steps': time_to_criterion,
             'state': np.array([i_WT, i_A, i_B], dtype=np.int)})
 
     def simulate_criterion(self, parameters, criterion):
@@ -362,7 +362,7 @@ class StemWF(StemGillespie):
             fixed_species = 'B'
 
         return ({
-            'steps': time_to_fixation * self.N,
+            'steps': time_to_fixation,
             'state': fixed_species})
 
     def simulate_fixation(self, parameters):
@@ -701,7 +701,7 @@ class StemWFTIMEVAR(StemGillespieTIMEVAR):
             time_to_criterion += 1
 
         return ({
-            'steps': time_to_criterion * self.N,
+            'steps': time_to_criterion,
             'state': np.array([i_WT, i_A, i_B], dtype=np.int)})
 
     def simulate_criterion(self, parameters, switch_times, criterion):
@@ -768,7 +768,7 @@ class StemWFTIMEVAR(StemGillespieTIMEVAR):
             fixed_species = 'B'
 
         return ({
-            'steps': time_to_fixation * self.N,
+            'steps': time_to_fixation,
             'state': fixed_species})
 
     def simulate_fixation(self, parameters, switch_times):

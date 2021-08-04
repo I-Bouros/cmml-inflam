@@ -16,7 +16,6 @@ It uses a Wight-Fisher algorithm.
 """
 
 import numpy as np
-from scipy.stats import multinomial
 
 from cmmlinflam import StemGillespie, StemGillespieTIMEVAR
 
@@ -215,10 +214,11 @@ class StemWF(StemGillespie):
         prob_A = self._prob_A_sampled(i_WT, i_A, i_B)
         prob_B = self._prob_B_sampled(i_WT, i_A, i_B)
 
-        probabilities = np.array([prob_WT, prob_A, prob_B])
+        probabilities = np.array([prob_WT, prob_A, prob_B], dtype=np.float64)
 
         # Generate random number for reaction and time to next reaction
-        i_WT, i_A, i_B = multinomial.rvs(self.N, probabilities)
+        i_WT, i_A, i_B = np.random.multinomial(
+            self.N, probabilities/probabilities.sum())
 
         return (i_WT, i_A, i_B)
 
@@ -601,10 +601,11 @@ class StemWFTIMEVAR(StemGillespieTIMEVAR):
         prob_A = self._prob_A_sampled(t, i_WT, i_A, i_B)
         prob_B = self._prob_B_sampled(t, i_WT, i_A, i_B)
 
-        probabilities = np.array([prob_WT, prob_A, prob_B])
+        probabilities = np.array([prob_WT, prob_A, prob_B], dtype=np.float64)
 
         # Generate random number for reaction and time to next reaction
-        i_WT, i_A, i_B = multinomial.rvs(self.N, probabilities)
+        i_WT, i_A, i_B = np.random.multinomial(
+            self.N, probabilities/probabilities.sum())
 
         return (i_WT, i_A, i_B)
 

@@ -110,9 +110,7 @@ class StemWF(StemGillespie):
         mu = self.mu_A + self.mu_B
 
         # Compute probability of change through non-mutation
-        tot_growth_rate = self.alpha_WT * i_WT + (
-            self.alpha_A * i_A) + self.alpha_B * i_B
-        nonmut = (1-mu) * (self.alpha_WT * i_WT) / tot_growth_rate
+        nonmut = (1-mu) * self.alpha_WT * i_WT
 
         return nonmut
 
@@ -144,12 +142,10 @@ class StemWF(StemGillespie):
 
         """
         # Compute probability of change through non-mutation
-        tot_growth_rate = self.alpha_WT * i_WT + (
-            self.alpha_A * i_A) + self.alpha_B * i_B
-        nonmut = (self.alpha_A * i_A) / tot_growth_rate
+        nonmut = self.alpha_A * i_A
 
         # Compute probability of change through mutation
-        mutat = (self.mu_A) * (self.alpha_WT * i_WT) / tot_growth_rate
+        mutat = self.mu_A * self.alpha_WT * i_WT
 
         return (nonmut + mutat)
 
@@ -181,12 +177,10 @@ class StemWF(StemGillespie):
 
         """
         # Compute probability of change through non-mutation
-        tot_growth_rate = self.alpha_WT * i_WT + (
-            self.alpha_A * i_A) + self.alpha_B * i_B
-        nonmut = (self.alpha_B * i_B) / tot_growth_rate
+        nonmut = self.alpha_B * i_B
 
         # Compute probability of change through mutation
-        mutat = (self.mu_B) * (self.alpha_WT * i_WT) / tot_growth_rate
+        mutat = self.mu_B * self.alpha_WT * i_WT
 
         return (nonmut + mutat)
 
@@ -488,10 +482,7 @@ class StemWFTIMEVAR(StemGillespieTIMEVAR):
         mu = self.mu_A + self.mu_B
 
         # Compute probability of change through non-mutation
-        tot_growth_rate = self.alpha_WT * i_WT + (
-            self.alpha_A * i_A) + (self.alpha_WT + (
-                self.alpha_B-self.alpha_WT) * self._environment(t)) * i_B
-        nonmut = (1-mu) * (self.alpha_WT * i_WT) / tot_growth_rate
+        nonmut = (1-mu) * (self.alpha_WT * i_WT)
 
         return nonmut
 
@@ -525,13 +516,10 @@ class StemWFTIMEVAR(StemGillespieTIMEVAR):
 
         """
         # Compute probability of change through non-mutation
-        tot_growth_rate = self.alpha_WT * i_WT + (
-            self.alpha_A * i_A) + (self.alpha_WT + (
-                self.alpha_B-self.alpha_WT) * self._environment(t)) * i_B
-        nonmut = (self.alpha_A * i_A) / tot_growth_rate
+        nonmut = self.alpha_A * i_A
 
         # Compute probability of change through mutation
-        mutat = (self.mu_A) * (self.alpha_WT * i_WT) / tot_growth_rate
+        mutat = self.mu_A * self.alpha_WT * i_WT
 
         return (nonmut + mutat)
 
@@ -565,13 +553,11 @@ class StemWFTIMEVAR(StemGillespieTIMEVAR):
 
         """
         # Compute probability of change through non-mutation
-        tot_growth_rate = self.alpha_WT * i_WT + (
-            self.alpha_A * i_A) + (self.alpha_WT + (
-                self.alpha_B-self.alpha_WT) * self._environment(t)) * i_B
-        nonmut = (self.alpha_B * i_B) / tot_growth_rate
+        nonmut = (self.alpha_WT + (
+            self.alpha_B-self.alpha_WT) * self._environment(t))*i_B
 
         # Compute probability of change through mutation
-        mutat = (self.mu_B) * (self.alpha_WT * i_WT) / tot_growth_rate
+        mutat = (self.mu_B) * (self.alpha_WT * i_WT)
 
         return (nonmut + mutat)
 

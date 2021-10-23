@@ -390,7 +390,7 @@ class StemGillespie(object):
             propens_5, propens_6])
         sum_propens = np.empty(propens.shape)
         for e in range(propens.shape[0]):
-            sum_propens[e] = np.sum(propens[:(e+1)])
+            sum_propens[e] = np.sum(propens[:(e+1)]) / np.sum(propens)
 
         if u < sum_propens[0]:
             i_WT += -1
@@ -1099,7 +1099,7 @@ class StemGillespieTIMEVAR(StemGillespie):
             propens_5, propens_6])
         sum_propens = np.empty(propens.shape)
         for e in range(propens.shape[0]):
-            sum_propens[e] = np.sum(propens[:(e+1)])
+            sum_propens[e] = np.sum(propens[:(e+1)]) / np.sum(propens)
 
         if u < sum_propens[0]:
             i_WT += -1
